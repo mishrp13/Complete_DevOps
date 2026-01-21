@@ -27,7 +27,7 @@ echo "Size: $(wc -c <"$file") bytes"
 echo "Lines: $(wc -l <"$file")"
 echo "Words: $(wc -w <"$file")"
 
-
+   
 # check permission
 
 echo ""
