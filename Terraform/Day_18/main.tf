@@ -129,3 +129,69 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
+resource "aws_lambda_layer_version" "pillow_layer" {
+  filename = "${path.module}/pillow_layer.zip"
+  layer_name = "${var.project_name}-pillow-layer"
+  compatible_runtimes = ["python3.12"]
+  description = "pillow library for image processing"
+
+}
+
+data "archive_file" "lambda_zip" {
+  type = "Zip"
+  source_file = "${path.module}/../lambda/lambda_function.py"
+  output_path = "${path.module}/lamda_function.zip"
+  
+}
+
+# lambda function
+resource "aws_lambda_function" "image_processor" {
+  filename         = data.archive_file.lambda_zip.output_path
+  function_name    = local.lambda_function_name
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "lambda_function.lambda_handler"
+  source_code_hash = data.archive_file.lambda_zip.output_base64sha256
+  runtime          = "python3.12"
+  timeout          = 60
+  memory_size      = 1024
+
+  layers = [aws_lambda_layer_version.pillow_layer.arn]
+
+  environment {
+    variables = {
+      PROCESSED_BUCKET = aws_s3_bucket.processed_bucket.id
+      LOG_LEVEL        = "INFO"
+    }
+  }
+}
+
+# CloudWatch Log Group for Lambda
+resource "aws_cloudwatch_log_group" "lambda_processor" {
+  name              = "/aws/lambda/${local.lambda_function_name}"
+  retention_in_days = 7
+}
+
+# ============================================================================
+# S3 EVENT TRIGGER
+# ============================================================================
+
+# Lambda permission to be invoked by S3
+resource "aws_lambda_permission" "allow_s3" {
+  statement_id  = "AllowExecutionFromS3"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.image_processor.function_name
+  principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.upload_bucket.arn
+}
+
+# S3 bucket notification to trigger Lambda
+resource "aws_s3_bucket_notification" "upload_bucket_notification" {
+  bucket = aws_s3_bucket.upload_bucket.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.image_processor.arn
+    events              = ["s3:ObjectCreated:*"]
+  }
+
+  depends_on = [aws_lambda_permission.allow_s3]
+}
