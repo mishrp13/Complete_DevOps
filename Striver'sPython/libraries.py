@@ -45,8 +45,21 @@
 # print(any(arr))
 # print(all(arr))
 
-arr = [1,2,3,4,4,5]
-print(arr.count(4))
+# arr = [1,2,3,4,4,5]
+# print(arr.count(4))
+
+def count_element_in_list(arr,number):
+    cnt=0
+    for el in arr:
+        if el==number:
+            cnt=cnt+1
+    return cnt
+
+
+arr=[1,2,2,3,4]
+print(count_element_in_list(arr,3))
+
+#start from 18th minute
 
 
 
