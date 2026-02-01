@@ -1,16 +1,18 @@
 class Solution:
-    def Pattern5(self,n):
+
+    def Pattern8(self,n):
         for i in range(0,n):
-            for j in range(0,n-i):
+            for j in range(0,i):
+                print(" ", end= " ")
+            for j in range(0, 2*n-(2*i+1)):
                 print("*", end=" ")
             print()
 
     
     def main(self):
-        N=8
+        N=7
         sol=Solution()
-        sol.Pattern5(N)
-
+        sol.Pattern8(N)
 
 if __name__=="__main__":
     Solution().main()

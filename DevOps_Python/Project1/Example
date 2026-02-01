@@ -1,0 +1,3 @@
+export DATABASE_URL="postgres://user:pass@db:5432/app"
+export DEBUG=true
+python app.py

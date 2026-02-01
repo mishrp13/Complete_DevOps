@@ -8,10 +8,10 @@ read -p "Enter operator(+,-,*,/): " op
 read -p "Enter second number: " num2
 
 case $op in
-    +) result= $((num1 + num2));;
-    -) result= $((num1 - num2));;
-    *) result= $((num1 * num2));;
-    /) result= $((num1 / num2));;
+    +) result=$((num1 + num2));;
+    -) result=$((num1 - num2));;
+    *) result=$((num1 * num2));;
+    /) result=$((num1 / num2));;
     *) echo "Invalid Operator"; exit 1;;
 esac
 
@@ -44,4 +44,5 @@ echo "Product: $((num1 * num2))"
 if [ $num2 -ne 0 ]; then 
    echo "Quotient: $((num1 / num2))"
    echo "Remainder: $((num1 % num2))"
-fi
+fi 
+
