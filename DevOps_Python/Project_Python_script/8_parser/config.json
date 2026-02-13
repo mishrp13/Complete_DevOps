@@ -1,0 +1,6 @@
+{
+  "app_name": "devops-app",
+  "environment": "production",
+  "port": 8080,
+  "debug": false
+}

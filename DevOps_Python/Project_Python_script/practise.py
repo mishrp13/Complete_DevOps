@@ -1,29 +1,33 @@
-def analyze_log_file(file_path):
-    error_count=0
-    warning_count=0
+import subprocess
 
+service_name=input("Enter the service name: ")
+
+def check_service(service):
     try:
-        with open(file_path,"r") as log_file:
-            for line in log_file:
-                if "ERROR" in line:
-                    error_count +=1
-                elif "Warning" in line:
-                    warning_count +=1
-                
+        subprocess.check_output(
+            ["systemctl","is-active","--quiet",service]
+        )
+    except subprocess.CalledProcessError:
+        return False
+    
+def restart_service(service):
+    try:
+        subprocess.check_output(
+            ["sudo","systemct","restart",service]
+        )
+    except subprocess.CalledProcessError:
+        return False
+    
+if check_service(service_name):
+    print(f"service '{service_name}' is running")
+else:
+    print(f"service '{service_name}' is not running")
+    print(f"service '{service_name}' is restarting")
 
-        print("Analysing the file")
-        print("_____________")
-        print(f" warning count: {warning_count}")
-        print(f" Error Count: {error_count}")
-
-    except FileNotFoundError:
-        print(f" file: {file_path} not found")
-    except PermissionError:
-        print(f" Permission denied for: {file_path} ")
-    except Exception as e:
-        print(f"Unexpected Error: {e} ")
-
-
-if __name__=="__main__":
-    log_file_path="application.log"
-    analyze_log_file(log_file_path)
+    if restart_service(service_name):
+        if check_service(service_name):
+            print(f"service '{service_name}' is running")
+        else:
+            print(f"service '{service_name}' restarted but not running")
+    else:
+        print(f"service '{service_name}' failed to restart")
