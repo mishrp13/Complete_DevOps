@@ -1,0 +1,4 @@
+2026-02-19 12:33:40,593 -INFO -Attempting division: 10/2 
+2026-02-19 12:33:40,594 -INFO -Divion  Successfull: 5.0
+2026-02-19 12:33:40,594 -INFO -Attempting division: 5/0 
+2026-02-19 12:33:40,594 -ERROR -Division by Zero attempted: 

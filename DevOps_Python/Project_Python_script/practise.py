@@ -1,33 +1,20 @@
-import subprocess
+import logging
 
-service_name=input("Enter the service name: ")
+logging.basicConfig(
+    filename="calculator.log",
+    level=logging.INFO,
+    format="%(asctime)s -%(levelname)s -%(message)s"
+)
 
-def check_service(service):
+def divide(a,b):
+    logging.info(f"Attempting division: {a}/{b} ")
     try:
-        subprocess.check_output(
-            ["systemctl","is-active","--quiet",service]
-        )
-    except subprocess.CalledProcessError:
-        return False
+        result= a/b
+        logging.info(f"Divion  Successfull: {result}")
+        return result
+    except ZeroDivisionError:
+        logging.error("Division by Zero attempted: ")
+        return None
     
-def restart_service(service):
-    try:
-        subprocess.check_output(
-            ["sudo","systemct","restart",service]
-        )
-    except subprocess.CalledProcessError:
-        return False
-    
-if check_service(service_name):
-    print(f"service '{service_name}' is running")
-else:
-    print(f"service '{service_name}' is not running")
-    print(f"service '{service_name}' is restarting")
-
-    if restart_service(service_name):
-        if check_service(service_name):
-            print(f"service '{service_name}' is running")
-        else:
-            print(f"service '{service_name}' restarted but not running")
-    else:
-        print(f"service '{service_name}' failed to restart")
+divide(10,2)
+divide(5,0)
