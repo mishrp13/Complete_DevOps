@@ -1,20 +1,32 @@
-import logging
+def is_prime(n):
 
-logging.basicConfig(
-    filename="calculator.log",
-    level=logging.INFO,
-    format="%(asctime)s -%(levelname)s -%(message)s"
-)
+    cnt=0
 
-def divide(a,b):
-    logging.info(f"Attempting division: {a}/{b} ")
-    try:
-        result= a/b
-        logging.info(f"Divion  Successfull: {result}")
-        return result
-    except ZeroDivisionError:
-        logging.error("Division by Zero attempted: ")
-        return None
+    for i in range(1,n+1):
+
+        if n%i==0:
+            cnt=cnt+1
+
+    if cnt==2:
+        return True
     
-divide(10,2)
-divide(5,0)
+    return False
+
+def isPrimeUpto(n):
+    cnt=0
+
+    for i in range(2,n+1):
+
+        if is_prime(i):
+            cnt+=1
+
+    return cnt
+
+
+n=int(input("enter any number: "))
+ans=isPrimeUpto(n)
+
+print(f"Prime number upto is : {ans}")
+
+
+        

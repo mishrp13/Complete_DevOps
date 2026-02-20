@@ -2,3 +2,7 @@
 2026-02-19 12:33:40,594 -INFO -Divion  Successfull: 5.0
 2026-02-19 12:33:40,594 -INFO -Attempting division: 5/0 
 2026-02-19 12:33:40,594 -ERROR -Division by Zero attempted: 
+2026-02-19 12:56:49,615 -INFO -Attempting division: 34/56
+2026-02-19 12:56:49,616 -INFO -Division successfull: 0.6071428571428571
+2026-02-19 12:56:49,616 -INFO -Attempting division: 89/0
+2026-02-19 12:56:49,616 -ERROR -Divion by Zero attempted: 
