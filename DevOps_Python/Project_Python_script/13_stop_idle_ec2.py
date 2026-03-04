@@ -38,7 +38,7 @@ def get_average_cpu(instance_id):
     datapoints = metrics["Datapoints"]
     if not datapoints:
         return 0.0
-
+    
     avg_cpu = sum(dp["Average"] for dp in datapoints) / len(datapoints)
     return avg_cpu
 
