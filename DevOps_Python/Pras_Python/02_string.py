@@ -19,3 +19,7 @@ print(msg.split('!'))
 msg= "Hello world ! is my first Program"
 print(msg[0:5])
 print(msg[-1])
+
+#Strings are immutable in nature
+# text="Docker"
+# text[0]= "D"

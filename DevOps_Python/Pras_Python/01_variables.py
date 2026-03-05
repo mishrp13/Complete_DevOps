@@ -23,3 +23,12 @@ print(10//3)
 
 result= 2 * (3+4)**2 /5 -6
 print(result)
+
+
+
+# | Type   | Ordered | Mutable | Duplicates |
+# | ------ | ------- | ------- | ---------- |
+# | List   | ✅ Yes   | ✅ Yes   | ✅ Yes  |
+# | String | ✅ Yes   | ❌ No    | ✅ Yes  |
+# | Set    | ❌ No    | ✅ Yes   | ❌ No   |
+# | Tuple  | ✅ Yes   | ❌ No    | ✅ Yes  |
