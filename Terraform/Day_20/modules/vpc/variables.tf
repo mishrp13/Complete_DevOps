@@ -36,3 +36,22 @@ variable "single_nat_gateway" {
 }
 
 
+variable "public_subnet_tags" {
+  description = "Additional tags for public subnets"
+  type = map(string)
+  default = {}
+}
+
+variable "private_subnet_tags" {
+  description = "Additional tags for private subnets"
+  type = map(string)
+  default = {}
+}
+
+variable "tags" {
+  description = "Tags to apply all the resources"
+  type = map(string)
+  default={}
+}
+
+
