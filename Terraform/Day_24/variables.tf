@@ -77,3 +77,9 @@ variable "min_size" {
   default = 1
 }
 
+variable "s3_bucket_name" {
+  description = "The name of the s3 bucket(prefix)"
+  type = string
+  default = "Mera_bucket"
+}
+
