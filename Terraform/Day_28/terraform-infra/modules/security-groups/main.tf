@@ -69,3 +69,81 @@ resource "aws_security_group" "internal_alb" {
   )
 
 }
+
+
+# security group for bastion host
+
+resource "aws_security_group" "bastion" {
+  name = "${var.environment}-${var.project}-bastion-sg"
+  description = "Security group for bastion host"
+  vpc_id = var.vpc_id
+
+  ingress {
+    description = "ssh from allowed IPs"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = var.allowed_ssh_cidrs
+
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.tags,
+    {
+      name="${var.environment}-${var.project}-bastion-sg"
+    }
+  )
+}
+
+# security group for frontend ec2 instance
+
+resource "aws_security_group" "frontend" {
+  name = "${var.environment}-${var.project}-frontend-sg"
+  description = "Security group for the frontend application server"
+  vpc_id = var.vpc_id
+
+  ingress {
+    description = "http from ALB"
+    from_port = 3000
+    to_port = 3000
+    protocol = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
+  ingress {
+    description = "ssh from Bastion"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.tags,
+    {
+      name= "${var.environment}-${var.project}-frontend-sg"
+    }
+  )
+}
+
+# security group for backend EC2 Instances
+
+resource "aws_security_group" "backend" {
+  
+}
