@@ -145,5 +145,73 @@ resource "aws_security_group" "frontend" {
 # security group for backend EC2 Instances
 
 resource "aws_security_group" "backend" {
-  
+  name = "${var.environment}-${var.project}-backend-sg"
+  description = "security group for backend API Server"
+  vpc_id = var.vpc_id
+
+  ingress {
+    description = "API from Internal ALB"
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    security_groups = [aws_security_group.internal_alb.id]
+  }
+
+  ingress {
+    description = "SSH from bastion"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    security_groups = [aws_security_group.bastion.id]
+  }
+
+  egress {
+    description = "Allow all outbound Traffic"
+    from_port = -1
+    to_port = -1
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(
+    var.tags,
+    {
+      name= "${var.environment}-${var.project}-backend-sg"
+    }
+  )
 }
+
+# security group for RDS postgresql
+
+resource "aws_security_group" "rds" {
+  name = "${var.environment}-${var.project}-rds-sg"
+  description = "Security group for RDS prostgresql"
+  vpc_id = var.vpc_id
+
+  ingress {
+    description = "Allow traffic from backend sg"
+    from_port = 5432
+    to_port = 5432
+    protocol = "tcp"
+    security_groups = [aws_security_group.backend.id]
+  }
+  egress {
+    description = "No Outbound Traffic from rds"
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = []
+  }
+
+  tags = merge(
+    var.tags,
+    {
+      name="${var.environment}-${var.project}-rds-sg"
+    }
+  )
+}
+
+# HTTP	80	Standard HTTP
+# HTTPS	443	Standard HTTPS
+# HTTP	8080	Common alternative HTTP/application port
+# HTTPS	8443	Common alternative HTTPS port
